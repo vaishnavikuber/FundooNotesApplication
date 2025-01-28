@@ -1,0 +1,10 @@
+C:\Users\vaish\source\repos\FandooNotesApp\CommonLayer\bin\Debug\netcoreapp3.1\CommonLayer.deps.json
+C:\Users\vaish\source\repos\FandooNotesApp\CommonLayer\bin\Debug\netcoreapp3.1\CommonLayer.dll
+C:\Users\vaish\source\repos\FandooNotesApp\CommonLayer\bin\Debug\netcoreapp3.1\CommonLayer.pdb
+C:\Users\vaish\source\repos\FandooNotesApp\CommonLayer\obj\Debug\netcoreapp3.1\CommonLayer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\vaish\source\repos\FandooNotesApp\CommonLayer\obj\Debug\netcoreapp3.1\CommonLayer.AssemblyInfoInputs.cache
+C:\Users\vaish\source\repos\FandooNotesApp\CommonLayer\obj\Debug\netcoreapp3.1\CommonLayer.AssemblyInfo.cs
+C:\Users\vaish\source\repos\FandooNotesApp\CommonLayer\obj\Debug\netcoreapp3.1\CommonLayer.csproj.CoreCompileInputs.cache
+C:\Users\vaish\source\repos\FandooNotesApp\CommonLayer\obj\Debug\netcoreapp3.1\CommonLayer.sourcelink.json
+C:\Users\vaish\source\repos\FandooNotesApp\CommonLayer\obj\Debug\netcoreapp3.1\CommonLayer.dll
+C:\Users\vaish\source\repos\FandooNotesApp\CommonLayer\obj\Debug\netcoreapp3.1\CommonLayer.pdb
