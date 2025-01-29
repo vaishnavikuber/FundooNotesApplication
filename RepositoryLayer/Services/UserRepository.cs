@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Net.Security;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using CommonLayer.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interfaces;
@@ -18,10 +22,12 @@ namespace RepositoryLayer.Services
     public class UserRepository : IUserRepository
     {
         private readonly FundooDBContext context;
+        private readonly IConfiguration configuration;
 
-        public UserRepository(FundooDBContext context)
+        public UserRepository(FundooDBContext context, IConfiguration configuration)
         {
             this.context = context;
+            this.configuration = configuration;
         }
 
         public Users Registration(RegisterModel model)
@@ -65,11 +71,71 @@ namespace RepositoryLayer.Services
             var result=context.Users.FirstOrDefault(x=>x.Email == model.Email && x.Password== PasswordEncrypt( model.Password));
             if (result!=null)
             {
-                return  "Login Successfull";
+                string token = GenerateToken(result.UserID, result.Email);
+                return token;
             }
             return null;
         }
 
+        private string GenerateToken(int UserID,string Email)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new[]
+            {
+                new Claim("UserID",UserID.ToString()),
+                new Claim("Email",Email)
+            };
+            var token = new JwtSecurityToken(configuration["Jwt:Issuer"],
+                configuration["Jwt:Audience"],
+                claims,
+                expires: DateTime.Now.AddMinutes(15),
+                signingCredentials: credentials);
+
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+
+        }
+
+
+        public ForgetPassword ForgetPasswordMethod(string email)
+        {
+            Users users = context.Users.FirstOrDefault(x => x.Email == email);
+            if (users != null)
+            {
+                ForgetPassword forgetPassword = new ForgetPassword();
+                forgetPassword.UserID = users.UserID;
+                forgetPassword.Email=users.Email;
+                forgetPassword.Token = GenerateToken(users.UserID, users.Email);
+                return forgetPassword;
+            }
+            else
+            {
+                throw new Exception("User not Exist for requested email!!");
+
+            }
+        }
+
+        public bool ResetPassword(string email,ResetPasswordModel model)
+        {
+            Users users = context.Users.FirstOrDefault(x => x.Email == email);
+            if(users != null)
+            {
+                if(model.Password!= model.ConfirmPassword)
+                {
+                    return false;
+                }
+                else
+                {
+                   
+                    users.Password = PasswordEncrypt( model.ConfirmPassword);
+                    context.Users.Update(users);
+                    context.SaveChanges();
+                    return true;
+                }
+            }
+            return false;
+        }
 
 
 
