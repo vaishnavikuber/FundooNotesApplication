@@ -1,5 +1,8 @@
-﻿using CommonLayer.Models;
+﻿using System;
+using System.Threading.Tasks;
+using CommonLayer.Models;
 using ManagerLayer.Interfaces;
+using MassTransit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
@@ -12,10 +15,12 @@ namespace FandooNotesApp.Controllers
     {
 
         private readonly IUserManager manager;
+        private readonly IBus bus;
 
-        public UsersController(IUserManager manager)
+        public UsersController(IUserManager manager, IBus bus)
         {
             this.manager = manager;
+            this.bus = bus;
         }
 
         [HttpPost]
@@ -53,6 +58,48 @@ namespace FandooNotesApp.Controllers
             }
             return BadRequest(new ResponseModel<string> { Success = false, Message = "Login Failed" });
         }
+
+        [HttpGet]
+        [Route("forgetpassword")]
+        public async Task<IActionResult> ForgetPasswordM(string email)
+        {
+
+            try
+            {
+                if (manager.IsEmailExist(email))
+                {
+
+                    ForgetPassword forgetpassword = manager.ForgetPasswordMethod(email);
+                    SendMail send = new SendMail();
+                    send.SendEmail(forgetpassword.Email, forgetpassword.Token);
+                    Uri uri = new Uri("rabbitmq://localhost/FundooNotesEmailQueue");
+                    var endPoint = await bus.GetSendEndpoint(uri);
+                    await endPoint.Send(forgetpassword);
+                    return Ok(new ResponseModel<string> { Success = true, Message = "Mail sent successfully", Data = endPoint.ToString() });
+
+                }
+                return BadRequest(new ResponseModel<string> { Success = false, Message = "Email provided is not regestered" });
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+               
+            }
+        }
+
+
+        [HttpPut]
+        [Route("resetpassword")]
+        public IActionResult ResetPassword(string email, ResetPasswordModel model)
+        {
+            bool result = manager.ResetPassword(email, model);
+            if (result)
+            {
+                return Ok(new ResponseModel<bool> { Success = true, Message = "Password reset successfull",Data=result });
+            }
+            return BadRequest(new ResponseModel<bool> { Success = false, Message = "failed to reset password" });
+        } 
 
 
 

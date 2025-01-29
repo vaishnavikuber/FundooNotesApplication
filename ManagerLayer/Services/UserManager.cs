@@ -43,5 +43,14 @@ namespace ManagerLayer.Services
             return user.Login(model);
         }
 
+        public ForgetPassword ForgetPasswordMethod(string email)
+        {
+            return user.ForgetPasswordMethod(email);
+        }
+
+        public bool ResetPassword(string email, ResetPasswordModel model)
+        {
+            return user.ResetPassword(email, model);
+        }
     }
 }
