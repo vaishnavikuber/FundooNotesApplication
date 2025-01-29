@@ -11,6 +11,8 @@ namespace ManagerLayer.Interfaces
         public Users Registration(RegisterModel model);
         public bool IsEmailExist(string email);
         public string Login(LoginModel model);
+        public ForgetPassword ForgetPasswordMethod(string email);
+        public bool ResetPassword(string email, ResetPasswordModel model);
 
     }
 }

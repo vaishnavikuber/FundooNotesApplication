@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FandooNotesApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bf1a67c86d6d9884034899952c1239a2af461f46")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+660425b61ab4df785a36b69611f7f956223fda79")]
 [assembly: System.Reflection.AssemblyProductAttribute("FandooNotesApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FandooNotesApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
