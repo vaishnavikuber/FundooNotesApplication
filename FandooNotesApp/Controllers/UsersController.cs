@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CommonLayer.Models;
 using ManagerLayer.Interfaces;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
@@ -59,6 +61,7 @@ namespace FandooNotesApp.Controllers
             return BadRequest(new ResponseModel<string> { Success = false, Message = "Login Failed" });
         }
 
+       
         [HttpGet]
         [Route("forgetpassword")]
         public async Task<IActionResult> ForgetPasswordM(string email)
@@ -68,7 +71,7 @@ namespace FandooNotesApp.Controllers
             {
                 if (manager.IsEmailExist(email))
                 {
-
+                   
                     ForgetPassword forgetpassword = manager.ForgetPasswordMethod(email);
                     SendMail send = new SendMail();
                     send.SendEmail(forgetpassword.Email, forgetpassword.Token);
@@ -88,11 +91,13 @@ namespace FandooNotesApp.Controllers
             }
         }
 
-
+        [Authorize]
         [HttpPut]
         [Route("resetpassword")]
-        public IActionResult ResetPassword(string email, ResetPasswordModel model)
+
+        public IActionResult ResetPassword( ResetPasswordModel model)
         {
+            string email = User.Claims.FirstOrDefault(c => c.Type == "Email").Value;
             bool result = manager.ResetPassword(email, model);
             if (result)
             {
