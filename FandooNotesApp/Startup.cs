@@ -41,6 +41,9 @@ namespace FandooNotesApp
             services.AddDbContext<FundooDBContext>(a => a.UseSqlServer(Configuration["ConnectionStrings:DBConnection"]));
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<INotesRepository, NotesRepository>();
+            services.AddTransient<INotesManager, NotesManager>();
+            
             //for swagger
             services.AddSwaggerGen(c =>
             {
