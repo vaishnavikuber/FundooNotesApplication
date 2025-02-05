@@ -39,10 +39,15 @@ namespace FandooNotesApp
         {
             services.AddControllers();
             services.AddDbContext<FundooDBContext>(a => a.UseSqlServer(Configuration["ConnectionStrings:DBConnection"]));
+            services.AddStackExchangeRedisCache(options => { options.Configuration = Configuration["RedisCacheUrl"]; });
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserManager, UserManager>();
             services.AddTransient<INotesRepository, NotesRepository>();
             services.AddTransient<INotesManager, NotesManager>();
+            services.AddTransient<ILabelRepository, LabelRepository>();
+            services.AddTransient<ILabelManager, LabelManager>();
+            services.AddTransient<ICollaboratorRepository, CollaboratorRepository>();
+            services.AddTransient<ICollaboratorManager, CollaboratorManager>();
             
             //for swagger
             services.AddSwaggerGen(c =>

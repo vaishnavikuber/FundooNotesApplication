@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using CommonLayer.Models;
 using ManagerLayer.Interfaces;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interfaces;
@@ -32,28 +33,7 @@ namespace ManagerLayer.Services
             return notes.GetAllNotes(userId);
         }
 
-        //public EditNotesModel Model(int notesId)
-        //{
-        //    Notes note = context.Notes.FirstOrDefault(x => x.NotesID == notesId);
-        //    if (note == null)
-        //    {
-        //        return null;
-        //    }
-        //    else
-        //    {
-        //        EditNotesModel model = new EditNotesModel();
-        //        model.Title = note.Title;
-        //        model.Description = note.Description;
-        //        model.Reminder = note.Reminder;
-        //        model.IsArchive = note.IsArchive;
-        //        model.Color = note.Color;
-        //        model.IsPin = note.IsPin;
-        //        model.Image = note.Image;
-        //        model.IsTrash = note.IsTrash;
-        //        model.UpdatedAt = DateTime.Now;
-        //        return model;
-        //    }
-        //}
+        
 
         public bool EditNotes(EditNotesModel model, int notesId, int userId)
         {
@@ -63,7 +43,36 @@ namespace ManagerLayer.Services
         {
             return notes.DeleteNotes(notesId);
         }
+        public bool PinUnPin(int userId, int notesId)
+        {
+            return notes.PinUnPin(userId, notesId);
+        }
+        public bool TrashUnTrash(int userId, int notesId)
+        {
+            return notes.TrashUnTrash(userId, notesId);
 
+        }
+        public bool Archive(int userId, int notesId)
+        {
+            return notes.Archive(userId, notesId);
+        }
+        public bool DeleteForever(int userId, int notesId)
+        {
+            return notes.DeleteForever(userId, notesId);
+        }
+        public Notes Image(int userId, int notesId, IFormFile path)
+        {
+            return notes.Image(userId, notesId, path);
+
+        }
+        public Notes Remainder(int userId, int notesId, DateTime datetimeToReminder)
+        {
+            return notes.Remainder(userId, notesId, datetimeToReminder);
+        }
+        public Notes Color(int userId, int notesId, string color)
+        {
+            return notes.Color(userId, notesId, color);
+        }
 
 
     }
